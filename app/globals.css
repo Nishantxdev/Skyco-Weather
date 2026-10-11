@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.body{
+  background:radial-gradient(ellipse at 72% 40%,rgba(34,85,128,.27),transparent 45%),linear-gradient(122deg,#0d2037 0%,#102d4a 55%,#102b47 100%)
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.current-panel{
+  background: linear-gradient(145deg, #4489c2 0%, #3477ae 53%, #286591 100%)
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.refresh{
+  fill: none;
+    stroke: currentColor;
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+svg{
+  width: 15px;
+    height: 15px;
+}
+
+.current-temp{
+    margin: -1px 0 0;
+    height: 92px;
+    /* font-family: Manrope, 'DM Sans', sans-serif; */
+    font-size: 61px;
+    font-weight: 600;
+    line-height: 2;
+    letter-spacing: -.065em;
+    text-shadow: 0 3px 16px rgba(10, 39, 64, .12);
+}
+
+.metric-label{
+  font-size: 12px;
+    font-weight: 600;
+}
+
+.metric-card{
+  font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -.02em;
+}
+
+.metric-caption{
+  font-size: 14px;
 }
