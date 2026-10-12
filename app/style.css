@@ -1,0 +1,44 @@
+.current-panel{
+  background: linear-gradient(145deg, #4489c2 0%, #3477ae 53%, #286591 100%)
+}
+
+.refresh{
+  fill: none;
+    stroke: currentColor;
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    
+}
+
+svg{
+  width: 15px;
+    height: 15px;
+}
+
+.current-temp{
+    margin: -1px 0 0;
+    height: 92px;
+    /* font-family: Manrope, 'DM Sans', sans-serif; */
+    font-size: 61px;
+    font-weight: 600;
+    line-height: 2;
+    letter-spacing: -.065em;
+    text-shadow: 0 3px 16px rgba(10, 39, 64, .12);
+}
+
+.metric-label{
+  font-size: 12px;
+    font-weight: 600;
+}
+
+.metric-card{
+  font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -.02em;
+}
+
+.metric-caption{
+  font-size: 14px;
+}
