@@ -1,4 +1,5 @@
 "use client"
+import "./style.css"
 import { useState, useRef } from "react";
 
 export default function Home() {
