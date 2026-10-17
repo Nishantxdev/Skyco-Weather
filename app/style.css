@@ -68,6 +68,13 @@ svg {
 
 .column {
   height: 302px;
+  flex-shrink: 0;
+  
+}
+
+.scroll_hours{
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .label {

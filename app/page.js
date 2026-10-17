@@ -7,10 +7,14 @@ export default function Home() {
   const [weather_data, setweather_data] = useState(null);
   const [delhi_weather, setdelhi_weather] = useState({})
   const [city_location, setcity_location] = useState(null);
-  const [Arraydate, setArraydate] = useState([])
-  const [Arrayday, setArrayday] = useState([])
+  const [arrayDate, setarrayDate] = useState([])
+  const [arrayDay, setarrayDay] = useState([])
+  const [arrayTime, setarrayTime] = useState([])
   const ref = useRef();
   const ref2 = useRef();
+
+
+
   useEffect(() => {
     let delhi_location = async () => {
       const data = await fetch(
@@ -79,22 +83,22 @@ export default function Home() {
     setweather_data(response1)
     let date = response1["result"].daily.time
 
-    if (Arraydate.length == 0) {
+    if (arrayDate.length == 0) {
       date.forEach(e => {
 
         // date
         const date = new Date(e);
 
-        const result = date.toLocaleDateString("en-US", {
+        const result1 = date.toLocaleDateString("en-US", {
           month: "numeric",
           day: "numeric",
           timeZone: "UTC"
         });
 
-        setArraydate(e => [...e, result])
+        setarrayDate(e => [...e, result1])
 
         // day
-        const dateString = result;
+        const dateString = result1;
         const year = 2026;
 
         const [month, day] = dateString.split("/").map(Number);
@@ -106,7 +110,7 @@ export default function Home() {
           timeZone: "UTC"
         });
 
-        setArrayday(e => [...e, dayName])
+        setarrayDay(e => [...e, dayName])
 
       })
     }
@@ -115,6 +119,30 @@ export default function Home() {
       ref2.current.style.width = `${Math.trunc(response1["result"].current.relative_humidity_2m)}%`
     }
 
+    let time = response1["result"].hourly.time;
+
+
+    // for 24 hours forecast Time
+    if (arrayTime.length == 0) {
+
+      time.forEach((e) => {
+
+        const date = new Date(e);
+
+        let result2 = date.toLocaleString("en-GB", {
+          timeZone: "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false
+        })
+
+
+        setarrayTime((e) => [...e, result2])
+        // console.log(arrayTime)
+
+
+      })
+    }
 
 
   }
@@ -257,161 +285,55 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex">
-              <div className="column1 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
-                <div>
-                  <p className="label label_day pt-1.5">WED</p>
-                  <p className="label label_time">10:00</p>
-                </div>
+            {weather_data &&
+              Array(arrayTime).map((item, index) => {
+                // console.log(arrayTime[0])
+                const allsecond = [];
+                for (let i = 1; i <= 7; i++) {
+                  allsecond.push(
+                    <div key={i} className="column1 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
+                      <div>
+                        <p className="label label_day pt-1.5">WED</p>
+                        <p className="label label_time">{item[i]}</p>
+                      </div>
 
-                <div className="w-28 h-10">
-                  <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
+                      <div className="w-28 h-10">
+                        <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
+                      </div>
 
-                <span className="font-bold">10.9°c</span>
-                <span className="hour_desc">Partly cloudy</span>
-
-
-                <div className="pt-16">
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Rain</p>
-                    <p className="text-[12px] font-bold">0%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
-                    <p className="text-[12px] font-bold">90%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Wind</p>
-                    <p className="text-[12px] font-bold">7.7 km/h</p>
-                  </div>
-                </div>
-              </div>
-              <div className="column2 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
-                <div>
-                  <p className="label label_day pt-1.5">WED</p>
-                  <p className="label label_time">10:00</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">10.9°c</span>
-                <span className="hour_desc">Partly cloudy</span>
+                      <span className="font-bold">10.9°c</span>
+                      <span className="hour_desc">Partly cloudy</span>
 
 
-                <div className="pt-16">
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Rain</p>
-                    <p className="text-[12px] font-bold">0%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
-                    <p className="text-[12px] font-bold">90%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Wind</p>
-                    <p className="text-[12px] font-bold">7.7 km/h</p>
-                  </div>
-                </div>
-              </div>
-              <div className="column3 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
-                <div>
-                  <p className="label label_day pt-1.5">WED</p>
-                  <p className="label label_time">10:00</p>
-                </div>
+                      <div className="pt-16">
+                        <div className="desc ">
+                          <p className="text-[12px] text-[#d7e7f5]">Rain</p>
+                          <p className="text-[12px] font-bold">0%</p>
+                        </div>
+                        <div className="desc ">
+                          <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
+                          <p className="text-[12px] font-bold">90%</p>
+                        </div>
+                        <div className="desc ">
+                          <p className="text-[12px] text-[#d7e7f5]">Wind</p>
+                          <p className="text-[12px] font-bold">7.7 km/h</p>
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="w-28 h-10">
-                  <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">10.9°c</span>
-                <span className="hour_desc">Partly cloudy</span>
-
-
-                <div className="pt-16">
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Rain</p>
-                    <p className="text-[12px] font-bold">0%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
-                    <p className="text-[12px] font-bold">90%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Wind</p>
-                    <p className="text-[12px] font-bold">7.7 km/h</p>
-                  </div>
-                </div>
-              </div>
-              <div className="column4 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
-                <div>
-                  <p className="label label_day pt-1.5">WED</p>
-                  <p className="label label_time">10:00</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">10.9°c</span>
-                <span className="hour_desc">Partly cloudy</span>
-
-
-                <div className="pt-16">
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Rain</p>
-                    <p className="text-[12px] font-bold">0%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
-                    <p className="text-[12px] font-bold">90%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Wind</p>
-                    <p className="text-[12px] font-bold">7.7 km/h</p>
-                  </div>
-                </div>
-              </div>
-              <div className="column5 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
-                <div>
-                  <p className="label label_day pt-1.5">WED</p>
-                  <p className="label label_time">10:00</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">10.9°c</span>
-                <span className="hour_desc">Partly cloudy</span>
-
-
-                <div className="pt-16">
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Rain</p>
-                    <p className="text-[12px] font-bold">0%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
-                    <p className="text-[12px] font-bold">90%</p>
-                  </div>
-                  <div className="desc ">
-                    <p className="text-[12px] text-[#d7e7f5]">Wind</p>
-                    <p className="text-[12px] font-bold">7.7 km/h</p>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
+                  );
+                }
+                return (
+                  <div key={index} className="scroll_hours flex">
+                    {allsecond}
+                  </div>)
+              })}
 
           </div>
 
 
         </div>
-        {weather_data ? <div className="third_div text-white rounded-2xl ml-8 ">
+        <div className="third_div text-white rounded-2xl ml-8 ">
           <div className="flex justify-between border-b-2 border-[#CDE5FA21] h-20">
             <div className="pl-5 pt-3">
               <p className="font-bold">7-day forecast</p>
@@ -426,215 +348,37 @@ export default function Home() {
             </div>
           </div>
 
-          {
-            Arraydate && Arrayday &&
-            <div className="flex ">
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[0]} Today</p>
-                </div>
+          
+            {
+              weather_data &&
+              Array(arrayDate).map((item, index) => {
+                let all_third = []
+                for (let j = 0; j <= 6; j++) {
+                  all_third.push(
+                    <div key={j}  className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
+                      <div>
+                        <p className="label label_day pt-1.5">{item[j]} Today</p>
+                      </div>
 
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
+                      <div className="w-28 h-10">
+                        <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
+                      </div>
 
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[0])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[0])}°c </span>
+                      <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[j])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[j])}°c </span>
 
-              </div>
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[1]} Tomorrow</p>
-                </div>
+                    </div>
+                  )
+                }
+                return(
+                  <div key={index} className="flex ">
+                  {all_third}
+                  </div>
+                )
+              })
+              
 
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[1])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[1])}°c </span>
-
-              </div>
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[2]} {Arrayday[2]}</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[2])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[2])}°c </span>
-
-              </div>
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[3]} {Arrayday[3]}</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[3])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[3])}°c </span>
-
-              </div>
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[4]} {Arrayday[4]}</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[4])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[4])}°c </span>
-
-              </div>
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[5]} {Arrayday[5]}</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[5])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[5])}°c </span>
-
-              </div>
-              <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-                <div>
-                  <p className="label label_day pt-1.5">{Arraydate[6]} {Arrayday[6]}</p>
-                </div>
-
-                <div className="w-28 h-10">
-                  <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-                </div>
-
-                <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[6])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[6])}°c </span>
-
-              </div>
-
-            </div>
-
-          }
-
-
-        </div> : <div className="third_div text-white rounded-2xl ml-8 ">
-          <div className="flex justify-between border-b-2 border-[#CDE5FA21] h-20">
-            <div className="pl-5 pt-3">
-              <p className="font-bold">7-day forecast</p>
-              <p className="text-sm text-[#aac0d4]">A look at the week ahead</p>
-            </div>
-
-            <div className="flex justify-center items-center pr-6">
-              <p className="text-sm font-bold text-[#aac0d4] pr-2">Daily high and low</p>
-              <button className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#12385929] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
-                <svg className="refresh " viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 7.5A6.7 6.7 0 1 0 17 10M16.5 3.5v4h-4" /><path d="M10 6.5V10l2.3 1.4" /></svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="flex">
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-            <div className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-1.5 ">
-              <div>
-                <p className="label label_day pt-1.5">---</p>
-              </div>
-
-              <div className="w-28 h-10">
-                <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
-              </div>
-
-              <span className="font-bold">-- / --</span>
-              <span className="hour_desc">---</span>
-
-            </div>
-
-
-
-
-          </div>
-
-
-        </div>}
-
+            }
+        </div>
 
       </div>
     </div >
