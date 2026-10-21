@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 
-
 export default function Home() {
 
   const [weather_data, setweather_data] = useState(null);
@@ -193,7 +192,6 @@ export default function Home() {
 
         }
 
-        
       </div>
       <div className="flex flex-col gap-4">
 
