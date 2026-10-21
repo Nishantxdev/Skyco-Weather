@@ -54,6 +54,7 @@ svg {
   border-radius: 21px;
   background: linear-gradient(138deg, rgba(39, 87, 128, 0.96), rgba(27, 69, 107, 0.96));
   overflow: hidden;
+  position: relative;
 }
 
 .bottom_line {
@@ -69,11 +70,10 @@ svg {
 .column {
   height: 302px;
   flex-shrink: 0;
-  
+
 }
 
-.scroll_hours{
-  overflow-x: auto;
+.scroll_hours {
   overflow-y: hidden;
 }
 
@@ -145,22 +145,68 @@ svg {
   background-color: rgb(180, 225, 255);
 }
 
-.icon{
-
-}
+.icon {}
 
 .location-pin {
-    display: flex;
-    color: #80c8ff;
-    opacity: .92
+  display: flex;
+  color: #80c8ff;
+  opacity: .92
 }
 
 .location-pin svg {
-    width: 21px;
-    height: 21px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round
+}
+
+.right {
+  position: absolute;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: 15px; */
+  right: 2px;
+  top: 165px;
+  padding-left: 2px;
+
+  background-color: rgba(255, 255, 255, 0.121);
+  border-radius: 10px;
+  cursor: pointer;
+  
+}
+.right:hover{
+  background-color: rgba(255, 255, 255, 0.200);
+}
+
+
+.right_icon {
+  transform: scale(1.5);
+}
+
+.left {
+  position: absolute;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: 15px; */
+  left: 2px;
+  top: 165px;
+  padding-right: 2px;
+  background-color: rgba(255, 255, 255, 0.121);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.left:hover{
+  background-color: rgba(255, 255, 255, 0.200);
+}
+.left_icon {
+  transform: scale(1.5);
+  
 }

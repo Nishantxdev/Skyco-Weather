@@ -1,6 +1,9 @@
 "use client"
 import "./style.css"
 import { useState, useRef, useEffect } from "react";
+import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
+
 
 export default function Home() {
 
@@ -10,10 +13,10 @@ export default function Home() {
   const [arrayDate, setarrayDate] = useState([])
   const [arrayDay, setarrayDay] = useState([])
   const [arrayTime, setarrayTime] = useState([])
+  const [currentDay, setcurrentDay] = useState([])
   const ref = useRef();
   const ref2 = useRef();
-
-
+  const refscrollhours = useRef()
 
   useEffect(() => {
     let delhi_location = async () => {
@@ -25,7 +28,7 @@ export default function Home() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            city: "delhi"
+            city: "Varanasi"
           }),
         }
       );
@@ -81,8 +84,8 @@ export default function Home() {
 
     let response1 = await data1.json()
     setweather_data(response1)
+    
     let date = response1["result"].daily.time
-
     if (arrayDate.length == 0) {
       date.forEach(e => {
 
@@ -138,14 +141,39 @@ export default function Home() {
 
 
         setarrayTime((e) => [...e, result2])
-        // console.log(arrayTime)
 
-
+        const result1 = date.toLocaleDateString("en-US", {
+            month: "numeric",
+            day: "numeric",
+            timeZone: "UTC"
+          });
+  
+          // day
+          const dateString = result1;
+          const year = 2026;
+  
+          const [month, day] = dateString.split("/").map(Number);
+  
+          const date1 = new Date(Date.UTC(year, month - 1, day));
+  
+          const dayName = date1.toLocaleDateString("en-US", {
+            weekday: "long",
+            timeZone: "UTC"
+          });
+  
+          setcurrentDay((e)=>[...e , dayName])
       })
     }
-
-
+  
   }
+
+  // slide the second div
+    const slide = (direction) => {
+    refscrollhours.current?.scrollBy({
+      left: direction * 537,
+      behavior: "smooth",
+    });
+  };
   return (
     <div>
       <div className="text-white flex items-center gap-2 pl-10 pt-10">
@@ -164,13 +192,15 @@ export default function Home() {
         </div>
 
         }
+
+        
       </div>
       <div className="flex flex-col gap-4">
 
         <div className="flex gap-4 ">
           {weather_data ?
             Array(weather_data).map((item, index) => {
-              return (<div key={index} className="current-panel w-[550px] h-96 bg-[#3C77AF] ml-8 mt-5 p-5 text-white rounded-2xl">
+              return (<div key={index} className="current-panel w-137.5 h-96 bg-[#3C77AF] ml-8 mt-5 p-5 text-white rounded-2xl">
 
                 <div className="flex justify-between">
                   <span className="text-[#E5F2FF] font-bold">Right Now</span>
@@ -194,7 +224,7 @@ export default function Home() {
                         item["result"].current.cloud_cover >= 91 && item["result"].current.cloud_cover <= 100(<p className=" font-semibold ">Overcast</p>)}
                 </div>
 
-                <div className=" flex gap-2.5 my-[60px] text-[#bad2e7]">
+                <div className=" flex gap-2.5 my-15 text-[#bad2e7]">
                   <div className="Rain flex flex-col  bg-[#0f36576e] w-40 h-20 rounded-xl ">
                     <p className="metric-label px-3 pt-2 ">Rain</p>
 
@@ -214,14 +244,14 @@ export default function Home() {
                   <div className="Rain flex flex-col  bg-[#0f36576e] w-40 h-20 rounded-xl ">
                     <p className="metric-label px-3 pt-2 ">Wind</p>
 
-                    <p className="metric-card px-3 text-white">{Math.trunc(item["result"].current.wind_speed_10m)}km/h</p>
+                    <p className="metric-card px-3 text-white">{item["result"].current.wind_speed_10m.toFixed(1)}km/h</p>
                     <p className="metric-caption px-3">↗ wind</p>
                   </div>
 
 
                 </div>
               </div>)
-            }) : <div className="current-panel w-[550px] h-96 bg-[#3C77AF] ml-8 mt-5 p-5 text-white rounded-2xl">
+            }) : <div className="current-panel w-137.5 h-96 bg-[#3C77AF] ml-8 mt-5 p-5 text-white rounded-2xl">
 
               <div className="flex justify-between">
                 <span className="text-[#E5F2FF] font-bold">Right Now</span>
@@ -242,7 +272,7 @@ export default function Home() {
                 <p className=" font-semibold ">---------</p>
               </div>
 
-              <div className=" flex gap-2.5 my-[60px] text-[#bad2e7]">
+              <div className=" flex gap-2.5 my-15 text-[#bad2e7]">
                 <div className="Rain flex flex-col  bg-[#0f36576e] w-40 h-20 rounded-xl ">
                   <p className="metric-label px-3 pt-2 ">Rain</p>
 
@@ -275,25 +305,45 @@ export default function Home() {
             <div className="flex justify-between border-b-2 border-[#CDE5FA21]">
               <div className="bottom_line ">
                 <p className="font-bold">Hourly forecast</p>
-                <p className="text-sm text-[#aac0d4]">The next few hours</p>
+                <p className="text-sm text-[#aac0d4]">The few hours</p>
               </div>
               <div className="flex justify-center items-center pr-6">
-                <p className="text-sm font-bold text-[#aac0d4] pr-2">Next 24 hours</p>
+                <p className="text-sm font-bold text-[#aac0d4] pr-2">24 hours forecasting</p>
                 <button className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#12385929] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
                   <svg className="refresh " viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 7.5A6.7 6.7 0 1 0 17 10M16.5 3.5v4h-4" /><path d="M10 6.5V10l2.3 1.4" /></svg>
                 </button>
               </div>
             </div>
 
+
+
+            <div  onClick={()=>slide(1)} className="right">
+              <div className="right_icon"><IoIosArrowForward /></div>
+            </div>
+
+            <div  onClick={()=>slide(-1)} className="left">
+              <div className="left_icon"><IoIosArrowBack /></div>
+            </div>
+
             {weather_data &&
               Array(arrayTime).map((item, index) => {
-                // console.log(arrayTime[0])
+                
+                
                 const allsecond = [];
-                for (let i = 1; i <= 7; i++) {
+                for (let i = 0; i < 19; i++) {
+
+                  let cloud_cond = weather_data["result"].hourly.cloud_cover[i]
+                  let precipitation_probability = weather_data["result"].hourly.precipitation_probability[i]
+                  let relative_humidity_2m = Math.trunc(weather_data["result"].hourly.relative_humidity_2m[i])
+
+                  let wind_speed_10m = weather_data["result"].hourly.wind_speed_10m[i].toFixed(1)
+
+                  let temperature_2m = Math.trunc(weather_data["result"].hourly.temperature_2m[i])
+
                   allsecond.push(
                     <div key={i} className="column1 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
                       <div>
-                        <p className="label label_day pt-1.5">WED</p>
+                        <p className="label label_day pt-1.5">{currentDay[i].slice(0,3).toUpperCase()}</p>
                         <p className="label label_time">{item[i]}</p>
                       </div>
 
@@ -301,22 +351,26 @@ export default function Home() {
                         <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
                       </div>
 
-                      <span className="font-bold">10.9°c</span>
-                      <span className="hour_desc">Partly cloudy</span>
+                      <span className="font-bold">{temperature_2m}°c</span>
+                      
+                      {cloud_cond >= 0 && cloud_cond <= 10 ? (<span className="hour_desc">Clear Sky</span>) :
+                        cloud_cond >= 11 && cloud_cond <= 25 ? (<span className="hour_desc">Mostly Clear</span>) : cloud_cond >= 26 && cloud_cond <= 50 ? (<span className="hour_desc">Partly Cloudy</span>) : cloud_cond >= 51 && cloud_cond <= 75 ? (<span className="hour_desc">Mostly Cloudy</span>) :
+                          cloud_cond >= 76 && cloud_cond <= 90 ? (<span className="hour_desc">Very Cloudy</span>) :
+                            cloud_cond >= 91 && cloud_cond <= 100 && (<span className="hour_desc">Overcast</span>)}
 
 
                       <div className="pt-16">
                         <div className="desc ">
                           <p className="text-[12px] text-[#d7e7f5]">Rain</p>
-                          <p className="text-[12px] font-bold">0%</p>
+                          <p className="text-[12px] font-bold">{precipitation_probability}</p>
                         </div>
                         <div className="desc ">
                           <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
-                          <p className="text-[12px] font-bold">90%</p>
+                          <p className="text-[12px] font-bold">{relative_humidity_2m}%</p>
                         </div>
                         <div className="desc ">
                           <p className="text-[12px] text-[#d7e7f5]">Wind</p>
-                          <p className="text-[12px] font-bold">7.7 km/h</p>
+                          <p className="text-[12px] font-bold">{wind_speed_10m} km/h</p>
                         </div>
                       </div>
                     </div>
@@ -324,7 +378,7 @@ export default function Home() {
                   );
                 }
                 return (
-                  <div key={index} className="scroll_hours flex">
+                  <div ref={refscrollhours} key={index} className="scroll_hours flex">
                     {allsecond}
                   </div>)
               })}
@@ -348,14 +402,15 @@ export default function Home() {
             </div>
           </div>
 
-          
-            {
-              weather_data &&
-              Array(arrayDate).map((item, index) => {
-                let all_third = []
-                for (let j = 0; j <= 6; j++) {
+
+          {
+            weather_data &&
+            Array(arrayDate).map((item, index) => {
+              let all_third = []
+              for (let j = 0; j <= 6; j++) {
+                if (j == 0) {
                   all_third.push(
-                    <div key={j}  className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
+                    <div key={j} className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
                       <div>
                         <p className="label label_day pt-1.5">{item[j]} Today</p>
                       </div>
@@ -369,15 +424,49 @@ export default function Home() {
                     </div>
                   )
                 }
-                return(
-                  <div key={index} className="flex ">
-                  {all_third}
-                  </div>
-                )
-              })
-              
 
-            }
+                else if (j == 1) {
+                  all_third.push(
+                    <div key={j} className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
+                      <div>
+                        <p className="label label_day pt-1.5">{item[j]} Yesterday</p>
+                      </div>
+
+                      <div className="w-28 h-10">
+                        <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
+                      </div>
+
+                      <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[j])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[j])}°c </span>
+
+                    </div>
+                  )
+                }
+                else {
+                  all_third.push(
+                    <div key={j} className="column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
+                      <div>
+                        <p className="label label_day pt-1.5">{item[j]} {arrayDay[j].slice(0, 3).toUpperCase()}</p>
+                      </div>
+
+                      <div className="w-28 h-10">
+                        <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
+                      </div>
+
+                      <span className="font-bold">{Math.trunc(weather_data["result"].daily.temperature_2m_min[j])}°c /{Math.trunc(weather_data["result"].daily.temperature_2m_max[j])}°c </span>
+
+                    </div>
+
+                  )
+                }
+              }
+              return (
+                <div key={index} className="flex ">
+                  {all_third}
+                </div>
+              )
+            })
+
+          }
         </div>
 
       </div>
