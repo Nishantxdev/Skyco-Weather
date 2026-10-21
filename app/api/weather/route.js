@@ -8,9 +8,9 @@ const params = {
 	latitude: body.lati,
 	longitude: body.long,
 	daily: ["temperature_2m_max", "temperature_2m_min", "sunrise", "sunset"],
-	hourly: ["temperature_2m", "relative_humidity_2m", "precipitation_probability", "rain", "wind_speed_10m", "uv_index"],
-	current: ["temperature_2m", "precipitation", "rain", "relative_humidity_2m", "wind_speed_10m"],
-	past_days: 2,
+	hourly: ["temperature_2m", "relative_humidity_2m", "precipitation_probability", "rain", "wind_speed_10m", "uv_index", "cloud_cover"],
+	current: ["temperature_2m", "precipitation", "rain", "relative_humidity_2m", "wind_speed_10m","cloud_cover"],
+
 };
 const url = "https://api.open-meteo.com/v1/forecast";
 const responses = await fetchWeatherApi(url, params);
@@ -47,6 +47,7 @@ const weatherData = {
 		rain: current.variables(2).value(),
 		relative_humidity_2m: current.variables(3).value(),
 		wind_speed_10m: current.variables(4).value(),
+		cloud_cover: current.variables(5).value(),
 	},
 	hourly: {
 		time: Array.from(
@@ -59,6 +60,7 @@ const weatherData = {
 		rain: hourly.variables(3).valuesArray(),
 		wind_speed_10m: hourly.variables(4).valuesArray(),
 		uv_index: hourly.variables(5).valuesArray(),
+		cloud_cover: hourly.variables(6).valuesArray(),
 	},
 	daily: {
 		time: Array.from(
@@ -91,13 +93,13 @@ const weatherData = {
 // console.log("\nDaily data:\n", weatherData.daily)
 
     // return NextResponse.json(weatherData)
-
+	// console.log(weatherData)
     
       return NextResponse.json({
    message: "send data successfully!",
    result: weatherData
         }
       )
-
+	  
     
 }
