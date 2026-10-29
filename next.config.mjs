@@ -12,7 +12,13 @@ const nextConfig = {
         as: "*.css",
       },
     },
+    
   },
+//  module.exports : {
+  allowedDevOrigins: ['192.168.1.36'],
+// }
+ 
+
 };
 
 export default nextConfig;
