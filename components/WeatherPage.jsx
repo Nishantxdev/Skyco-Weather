@@ -23,7 +23,10 @@ const WeatherPage = ({forsearch}) => {
     useEffect(() => {
 
         function getLocationWeather() {
+            setTimeout(() => {
                 setIsLoading(true);
+                
+            }, 1000);
             if (!navigator.geolocation) {
                 setError("Geolocation is not supported by your browser.");
                 return;
