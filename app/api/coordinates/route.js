@@ -20,7 +20,8 @@ export async function POST(request) {
             latitude: data.lat,
             longitude: data.lon,
             address: data.address["city"],
-            country : data.address["country_code"]
+            country_code : data.address["country_code"],
+            country : data.address["country"]
         }
 
 
