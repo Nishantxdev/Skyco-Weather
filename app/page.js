@@ -2,7 +2,7 @@
 import "./style.css"
 import Searchbar from "@/components/Searchbar";
 import Loading from "./loading";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -17,9 +17,61 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const refscrollhours = useRef()
   const refbottomscroll = useRef()
-  
+
+  useEffect(() => {
+
+    function getLocationWeather() {
+      if (!navigator.geolocation) {
+        setError("Geolocation is not supported by your browser.");
+        return;
+      }
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        let coordinate = {
+          latitude: latitude,
+          longitude: longitude
+        }
+        currcity(coordinate)
+
+      }
+    )
+
+    getLocationWeather()
+
+    let currcity = async (res) => {
+      const city = await fetch(
+        "/api/coordinates",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lati: res.latitude,
+            long: res.longitude,
+          }),
+        }
+      );
+
+      let data = await city.json()
+      let citydata = {
+        longitude : data["result"].longitude, 
+        latitude : data["result"].latitude, 
+        name : data["result"].address,
+        country_code : data["result"].country
+      }
+
+      getweather(citydata)
+    }
+
+  }, [])
+
   let getweather = async (res) => {
-     setIsLoading(true);
+    setIsLoading(true);
     setCity(res)
 
     const data1 = await fetch(
@@ -37,7 +89,8 @@ export default function Home() {
     );
 
     let response1 = await data1.json()
-     setIsLoading(false);
+
+    setIsLoading(false);
     setweather_data(response1)
 
     let date = response1["result"].daily.time
@@ -117,14 +170,9 @@ export default function Home() {
       })
     }
 
-    // if (ref.current) {
-    //   ref.current.style.width = `${Math.trunc(response1["result"].current.relative_humidity_2m)}%`
-    // }
-    
-   
   }
-  
-  
+
+
   // slide the second div
   const slide = (direction) => {
     if (window.screen.width > 1320) {
@@ -135,17 +183,13 @@ export default function Home() {
       });
     }
 
-    else{
+    else {
       refscrollhours.current?.scrollBy({
         left: direction * 360,
         behavior: "smooth",
 
       });
     }
-
-
-
-    console.log("Screen width:", window.screen.width);
   };
 
   const bottom_slide = (direction) => {
@@ -158,8 +202,8 @@ export default function Home() {
   return (
 
     isLoading ? (
-      <Loading/>
-    ):(<div className="whole-app">
+      <Loading />
+    ) : (<div className="whole-app">
 
       <div className="nav text-white flex items-center  pt-10">
         <div className="location">
@@ -182,23 +226,20 @@ export default function Home() {
         </div>
 
 
-        <Searchbar getweather={getweather}/>
+        <Searchbar getweather={getweather} />
       </div>
       <div className="all_div flex flex-col gap-4">
 
         <div className="first_second flex gap-4 ">
           {weather_data ?
             Array(weather_data).map((item, index) => {
-              console.log(weather_data)
+
               return (<div key={index} className="current-panel w-137.5 h-96 bg-[#3C77AF] mt-5 p-5 text-white rounded-2xl">
 
                 <div className="right_now flex  justify-between">
                   <span className="text-[#E5F2FF] font-bold">Right Now</span>
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20.0092 2V5.13219C20.0092 5.42605 19.6418 5.55908 19.4537 5.33333C17.6226 3.2875 14.9617 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12"></path>
-          </svg> */}
 
-                  <button onClick={()=>getweather(city)} className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#2F6FA2] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
+                  <button onClick={() => getweather(city)} className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#2F6FA2] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
                     <svg className="refresh " viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 7.5A6.7 6.7 0 1 0 17 10M16.5 3.5v4h-4" /><path d="M10 6.5V10l2.3 1.4" /></svg>
                   </button>
 
@@ -227,7 +268,7 @@ export default function Home() {
                     <p className="metric-card px-3 text-white">{Math.trunc(item["result"].current.relative_humidity_2m)}%</p>
                     <div className="meter">
                       <div className="meter_child w-0" style={{
-                      width : `${Math.trunc(item["result"].current.relative_humidity_2m)}%`
+                        width: `${Math.trunc(item["result"].current.relative_humidity_2m)}%`
                       }}>
                       </div>
                     </div>
@@ -246,9 +287,6 @@ export default function Home() {
 
               <div className="flex right_now justify-between">
                 <span className="text-[#E5F2FF] font-bold">Right Now</span>
-                {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20.0092 2V5.13219C20.0092 5.42605 19.6418 5.55908 19.4537 5.33333C17.6226 3.2875 14.9617 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12"></path>
-          </svg> */}
 
                 <button className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#2F6FA2] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
                   <svg className="refresh " viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 7.5A6.7 6.7 0 1 0 17 10M16.5 3.5v4h-4" /><path d="M10 6.5V10l2.3 1.4" /></svg>
@@ -275,7 +313,7 @@ export default function Home() {
 
                   <p className="metric-card px-3 text-white">----</p>
                   <div className="meter">
-                    <div  className="meter_child w-0">
+                    <div className="meter_child w-0">
 
                     </div>
                   </div>
@@ -299,8 +337,8 @@ export default function Home() {
                 <p className="text-sm text-[#aac0d4]">The few hours</p>
               </div>
               <div className=" flex justify-center items-center pr-3">
-                
-                <button onClick={()=>getweather(city)} className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#12385929] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
+
+                <button onClick={() => getweather(city)} className="flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#12385929] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
                   <svg className="refresh " viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 7.5A6.7 6.7 0 1 0 17 10M16.5 3.5v4h-4" /><path d="M10 6.5V10l2.3 1.4" /></svg>
                 </button>
               </div>
@@ -316,7 +354,7 @@ export default function Home() {
               <div className="left_icon"><IoIosArrowBack /></div>
             </div>
 
-            {weather_data &&
+            {weather_data ?
               Array(arrayTime).map((item, index) => {
 
 
@@ -372,7 +410,41 @@ export default function Home() {
                   <div ref={refscrollhours} key={index} className="scroll_hours flex">
                     {allsecond}
                   </div>)
-              })}
+              }):
+              (
+              <div ref={refscrollhours} className="scroll_hours flex">
+                {Array.from({ length: 5 }).map((_, index) => (
+                <div  key={index} className="column1 column w-1/5 border-r-2 border-[#CDE5FA21] flex flex-col items-center gap-2 ">
+                      <div>
+                        <p className="label label_day pt-1.5">----</p>
+                        <p className="label label_time">----</p>
+                      </div>
+
+                      <div className="w-28 h-10">
+                        <img className="cloud" src="sun_cloud.png" alt="sun and cloud" />
+                      </div>
+
+                      <span className="font-bold">----</span>
+
+                 <span className="hour_desc">----</span>
+
+
+                      <div className="three-desc">
+                        <div className="desc ">
+                          <p className="text-[12px] text-[#d7e7f5]">Rain</p>
+                          <p className="text-[12px] font-bold">----</p>
+                        </div>
+                        <div className="desc ">
+                          <p className="text-[12px] text-[#d7e7f5]">Humidity</p>
+                          <p className="text-[12px] font-bold">----</p>
+                        </div>
+                        <div className="desc ">
+                          <p className="text-[12px] text-[#d7e7f5]">Wind</p>
+                          <p className="text-[12px] font-bold">----</p>
+                        </div>
+                      </div>
+                    </div>))}
+                  </div>)}
 
           </div>
 
@@ -387,7 +459,7 @@ export default function Home() {
 
             <div className="third_txt flex justify-center items-center pr-3">
               <p className=" text-sm font-bold text-[#aac0d4] pr-2">Daily high and low</p>
-              <button onClick={()=>getweather(city)} className="third_btn flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#12385929] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
+              <button onClick={() => getweather(city)} className="third_btn flex justify-center items-center cursor-pointer border border-[#c6dff438] w-7 h-7  bg-[#12385929] rounded-full hover:bg-[#87c2ef29] hover:border-[#c6dff485]">
                 <svg className="refresh " viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 7.5A6.7 6.7 0 1 0 17 10M16.5 3.5v4h-4" /><path d="M10 6.5V10l2.3 1.4" /></svg>
               </button>
             </div>
@@ -395,7 +467,7 @@ export default function Home() {
 
 
           {
-            weather_data &&
+            weather_data ?
             Array(arrayDate).map((item, index) => {
               let all_third = []
               for (let j = 0; j <= 6; j++) {
@@ -463,7 +535,31 @@ export default function Home() {
                   </div>
                 </div>
               )
-            })
+            }):(
+              <div ref={refbottomscroll}  className="sevens-day flex">
+                {Array.from({ length: 7 }).map((_, index) => (
+                   <div key={index}  className="bottom-column column1 justify-center last_column w-1/7 border-r-2 border-[#CDE5FA21] flex flex-col  items-center gap-1.5 ">
+                      <div>
+                        <p className="label label_day pt-1.5">---</p>
+                      </div>
+
+                      <div className="w-28 h-10">
+                        <img className="cloud1" src="sun_cloud.png" alt="sun and cloud" />
+                      </div>
+
+                      <span className="font-bold">-- /-- </span>
+
+
+                  <div onClick={() => bottom_slide(1)} className="bottom-right">
+                    <div className="right_icon"><IoIosArrowForward /></div>
+                  </div>
+
+                  <div onClick={() => bottom_slide(-1)} className="bottom-left">
+                    <div className="left_icon"><IoIosArrowBack /></div>
+                  </div>
+                </div>))}
+              </div>
+            )
 
           }
         </div>

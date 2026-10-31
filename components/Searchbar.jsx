@@ -3,7 +3,6 @@ import React, { useRef } from 'react'
 import { useState, useEffect } from 'react';
 
 const Searchbar = ({ getweather }) => {
-    // const [city, setCity] = useState([])
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [search, setSearch] = useState("");
     const [cities, setCities] = useState([]);
@@ -28,7 +27,6 @@ const Searchbar = ({ getweather }) => {
                 );
 
                 const data = await response.json();
-                console.log(data.results)
 
                 if (data.results) {
                     setCities(data.results);
@@ -60,7 +58,6 @@ const Searchbar = ({ getweather }) => {
     let handlechange = (e) => {
         setSearch(e.target.value);
         setShowSuggestions(true);
-        // console.log(e.target.value);
     }
 
     if(IsActive){
