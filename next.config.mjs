@@ -14,10 +14,16 @@ const nextConfig = {
     },
     
   },
-//  module.exports : {
-  allowedDevOrigins: ['192.168.1.36'],
-// }
- 
+
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/weather",
+        permanent: false,
+      },
+    ];
+  },
 
 };
 
