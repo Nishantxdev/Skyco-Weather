@@ -45,6 +45,8 @@ const WeatherPage = ({forsearch}) => {
         getLocationWeather()
 
         let currcity = async (res) => {
+        setIsLoading(true);
+
             const city = await fetch(
                 "/api/coordinates",
                 {
