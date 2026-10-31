@@ -264,7 +264,7 @@ svg {
   background-color: white;
   /* margin-left: 100px; */
   position: absolute;
-  top: 105px;
+  top: 61px;
   z-index: 1;
 }
 
@@ -291,6 +291,7 @@ svg {
   gap: 2px;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .nav {
@@ -505,7 +506,7 @@ svg {
   }
 
   .suggestions {
-    top: 140px;
+    /* top: 140px; */
     max-width: 89vw;
   }
 
@@ -605,7 +606,7 @@ svg {
   }
 
   .suggestions{
-    top: 132px;
+    top: 51px;
     font-size: 15px;
   }
 
