@@ -23,6 +23,7 @@ const WeatherPage = ({forsearch}) => {
     useEffect(() => {
 
         function getLocationWeather() {
+                setIsLoading(true);
             if (!navigator.geolocation) {
                 setError("Geolocation is not supported by your browser.");
                 return;
@@ -31,6 +32,7 @@ const WeatherPage = ({forsearch}) => {
         
 
         navigator.geolocation.getCurrentPosition(
+            
             async (position) => {
                 const { latitude, longitude } = position.coords;
                 let coordinate = {
@@ -45,7 +47,7 @@ const WeatherPage = ({forsearch}) => {
         getLocationWeather()
 
         let currcity = async (res) => {
-        setIsLoading(true);
+        
 
             const city = await fetch(
                 "/api/coordinates",
