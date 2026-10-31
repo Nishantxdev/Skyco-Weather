@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 .body{
-  background:radial-gradient(ellipse at 72% 40%,rgba(34,85,128,.27),transparent 45%),linear-gradient(122deg,#0d2037 0%,#102d4a 55%,#102b47 100%)
+  background:radial-gradient(ellipse at 72% 40%,rgba(34,85,128,.27),transparent 45%),linear-gradient(122deg,#0d2037 100%,#102d4a 55%,#102b47 100%);
+
+  
 }
 

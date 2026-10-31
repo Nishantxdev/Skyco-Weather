@@ -12,7 +12,19 @@ const nextConfig = {
         as: "*.css",
       },
     },
+    
   },
+
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/weather",
+        permanent: false,
+      },
+    ];
+  },
+
 };
 
 export default nextConfig;
